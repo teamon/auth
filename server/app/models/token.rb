@@ -10,7 +10,7 @@ class Token
   property :signed, Boolean
   property :created_at,   DateTime
   property :user_id, Integer, :nullable => true
-  
+
   belongs_to :user
   
   def sign!(user)

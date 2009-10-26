@@ -71,11 +71,11 @@ PAuth.configure do |c|
   c.consumer_key = "qp9hqefpuh34f"
   c.consumer_secret = "p8h243p9g3g"
   c.host = "localhost"
-  c.port = 4000
-  c.request_token_path = "/auth/request_token"
-  c.access_token_path = "/auth/access_token"
-  c.data_path = "/auth/data"
-  c.login_path = "/login"
+  c.port = 80
+  c.request_token_path = "/server_php/index.php?action=request_token"
+  c.access_token_path = "/server_php/index.php?action=access_token"
+  c.data_path = "/server_php/index.php?action=data"
+  c.login_path = "/server_php/index.php?action=login"
 end
 
 
