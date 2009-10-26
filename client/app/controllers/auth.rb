@@ -35,6 +35,10 @@ class PAuth
     "http://" + @@host + (@@port.blank? ? "" : ":#{@@port}" ) + make_path(@@login_path, params)
   end
   
+  def self.configure
+    yield self
+  end
+  
   protected
   
   def make_request(path, params)
@@ -63,15 +67,18 @@ class PAuth
   end
 end
 
+PAuth.configure do |c|
+  c.consumer_key = "qp9hqefpuh34f"
+  c.consumer_secret = "p8h243p9g3g"
+  c.host = "localhost"
+  c.port = 4000
+  c.request_token_path = "/auth/request_token"
+  c.access_token_path = "/auth/access_token"
+  c.data_path = "/auth/data"
+  c.login_path = "/login"
+end
 
-PAuth.consumer_key = "qp9hqefpuh34f"
-PAuth.consumer_secret = "p8h243p9g3g"
-PAuth.host = "localhost"
-PAuth.port = 4000
-PAuth.request_token_path = "/auth/request_token"
-PAuth.access_token_path = "/auth/access_token"
-PAuth.data_path = "/auth/data"
-PAuth.login_path = "/login"
+
 
 
 
