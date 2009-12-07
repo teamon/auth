@@ -39,8 +39,11 @@ class Token {
   }
   
   public function userToJson(){
+    $users = array(1 => "teamon");
+    
     return json_encode(array(
-      "id" => $this->user_id
+      "id" => $this->user_id,
+      "login" => $users[$this->user_id]
     ));
   }
   
@@ -58,9 +61,9 @@ class Token {
       secret="'.mysql_real_escape_string($secret).'" AND
       type="'.mysql_real_escape_string($type).'" AND
       signed="'.(int)$signed.'" AND
-      time<'.(time()-86400)' LIMIT 1');
-      
-    if(mysql_num_rows($res) > 0){
+      created_at>'.(time()-86400).' LIMIT 1');
+
+    if($res && mysql_num_rows($res) > 0){
       $row = mysql_fetch_assoc($res);
 
       $tkn = new Token();
@@ -90,37 +93,37 @@ class PAuthServer {
     $this->consumer_secret = $secret;
     $this->callback_uri = $callback_uri;
   }
-  
+
   public function getCallbackURI(){
     return $this->callback_uri;
   }
-  
+
   public function checkConsumerCredentials($key, $secret){
     return $this->consumer_key == $key && $this->consumer_secret == $secret;
   }
-  
+
   public function requestToken(){
     $tkn = Token::generateRequestToken();
     return $tkn->toJson();
   }
-  
+
   public function accessToken($token, $secret){
     $tkn = Token::find($token, $secret, "request", true);
     if(!$tkn) throw new Unauthorized("access token");
-    
+
     $tkn->type = "access";
     $tkn->regenerate();
     $tkn->save();
-    
+
     return $tkn->toJson();
   }
-  
+
   public function data($token, $secret){
     $tkn = Token::find($token, $secret, "access", true);
     if(!$tkn) throw new Unauthorized("data");
     return $tkn->userToJson();
   }
-  
+
   public function deleteOldTokens(){
     Token::deleteOld();
   }

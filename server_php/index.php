@@ -46,15 +46,15 @@ try {
         if(isset($_POST['submit'])){
           $login = $_POST['login'];
           $password = $_POST['password'];
-        
+
           // auth!!
-          
+
           if($login == "teamon" && $password == "mapex"){
             $tkn = Token::find($_GET['token'], $_GET['secret'], "request", false);
             echo $_GET['token'];
             echo "\n";
             echo $_GET['secret'];
-            if($tkn) $tkn->sign(1); // user_id!
+            if($tkn) $tkn->sign(1); // user_id !
             else throw new Unauthorized("no such token");
 
             header('Location: '.$server->getCallbackURI());
